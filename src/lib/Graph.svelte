@@ -10,17 +10,24 @@
 	const getExample = () => {
 		const exampleData = [];
 		let curr_date = new Date();
+		let curr_tier = 34;
 		for (let idx = 0; idx < 20; idx++) {
 			curr_date = new Date(curr_date.getTime() + getRandomInt(0, 45) * 60000);
+			curr_tier += (-1) ** getRandomInt(0, 2);
+			if (curr_tier < 0) {
+				curr_tier = 0;
+			}
+			if (curr_tier > 59) {
+				curr_tier = 59;
+			}
 			exampleData.push({
 				x: curr_date,
-				y: idx * 2 >= 60 ? 59 : idx * 2
+				y: curr_tier
 			});
 		}
 		return exampleData;
 	};
 
-	// 현재 생각 중인 방식은 00 = b5 대응 이런식으로 하는 거
 	const chart: Chart = {
 		options: {
 			series: [
@@ -46,18 +53,12 @@
 				}
 			},
 			stroke: {
-				curve: 'stepline'
+				curve: 'straight',
+				colors: ['#000']
 			},
 			title: {
 				text: '문제 티어',
 				align: 'left'
-			},
-			grid: {
-				borderColor: '#e7e7e7',
-				row: {
-					colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
-					opacity: 0.5
-				}
 			},
 			markers: {
 				size: 1
@@ -82,15 +83,27 @@
 				}
 			},
 			tooltip: {
-				custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-					return (
-						'<div class="arrow_box">' +
-						'<span>' +
-						series[seriesIndex][dataPointIndex] +
-						'</span>' +
-						'</div>'
-					);
-				}
+				// custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+				// 	return (
+				// 		'<div class="arrow_box">' +
+				// 		'<span>' +
+				// 		series[seriesIndex][dataPointIndex] +
+				// 		'</span>' +
+				// 		'</div>'
+				// 	);
+				// }
+			},
+			annotations: {
+				yaxis: ['#ad5600', '#435f7a', '#ec9a00', '#27e2a4', '#00b4fc', '#ff0062'].map(
+					(color, idx) => ({
+						label: {
+							text: ''
+						},
+						y: idx * 10 - 1,
+						y2: idx * 10 + 9,
+						fillColor: color
+					})
+				)
 			}
 		}
 	};
