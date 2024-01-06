@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { renderChart, type Chart } from 'svelte-chart-apex';
+	import type { TierRange } from './types';
 
 	function getRandomInt(min: number, max: number) {
 		min = Math.ceil(min);
@@ -10,15 +11,15 @@
 	const getExample = () => {
 		const exampleData = [];
 		let curr_date = new Date();
-		let curr_tier = 34;
+		let curr_tier: TierRange = 10;
 		for (let idx = 0; idx < 20; idx++) {
-			curr_date = new Date(curr_date.getTime() + getRandomInt(0, 45) * 60000);
+			curr_date = new Date(curr_date.getTime() + getRandomInt(2, 45) * 60000);
 			curr_tier += (-1) ** getRandomInt(0, 2);
 			if (curr_tier < 0) {
 				curr_tier = 0;
 			}
-			if (curr_tier > 59) {
-				curr_tier = 59;
+			if (curr_tier > 29) {
+				curr_tier = 29;
 			}
 			exampleData.push({
 				x: curr_date,
@@ -71,27 +72,14 @@
 					text: 'Tier',
 					rotate: 0
 				},
-				min: 0,
-				max: 59,
-				tickAmount: 6,
+				forceNiceScale: true,
 				labels: {
 					formatter: (value) => {
-						let color = ['B', 'S', 'G', 'P', 'D', 'R'][Math.floor(value / 10)];
-						let num = Math.floor((value % 10) / 2) + 1;
+						let color = ['B', 'S', 'G', 'P', 'D', 'R'][Math.floor(value / 5)];
+						let num = Math.floor(value % 5) + 1;
 						return color + num;
 					}
 				}
-			},
-			tooltip: {
-				// custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-				// 	return (
-				// 		'<div class="arrow_box">' +
-				// 		'<span>' +
-				// 		series[seriesIndex][dataPointIndex] +
-				// 		'</span>' +
-				// 		'</div>'
-				// 	);
-				// }
 			},
 			annotations: {
 				yaxis: ['#ad5600', '#435f7a', '#ec9a00', '#27e2a4', '#00b4fc', '#ff0062'].map(
@@ -99,8 +87,8 @@
 						label: {
 							text: ''
 						},
-						y: idx * 10 - 1,
-						y2: idx * 10 + 9,
+						y: idx * 5,
+						y2: (idx + 1) * 5,
 						fillColor: color
 					})
 				)
