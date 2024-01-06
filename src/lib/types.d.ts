@@ -4,4 +4,4 @@ type Enumerate<N extends number, Acc extends number[] = []> = Acc['length'] exte
 
 export type IntRange<F extends number, T extends number> = Exclude<Enumerate<T>, Enumerate<F>>;
 
-export type TierRange = IntRange<0, 25>;
+export type TierRange = IntRange<0, 30>;
