@@ -26,6 +26,11 @@
 				},
 				toolbar: {
 					show: false
+				},
+				events: {
+					markerClick: (event, chartContext, config) => {
+						console.log(data[config.dataPointIndex].id);
+					}
 				}
 			},
 			stroke: {
@@ -37,7 +42,7 @@
 				align: 'left'
 			},
 			markers: {
-				size: 1
+				size: 0
 			},
 			xaxis: {
 				type: 'datetime'
