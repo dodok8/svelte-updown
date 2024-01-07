@@ -62,7 +62,14 @@
 						y2: (idx + 1) * 5,
 						fillColor: color
 					})
-				)
+				),
+				points: data.map((item) => ({
+					x: item.x.getTime(),
+					y: item.y,
+					label: {
+						text: `${convertNumTier(item.y)} ${item.id}`
+					}
+				}))
 			}
 		}
 	};
