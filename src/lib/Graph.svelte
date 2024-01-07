@@ -1,40 +1,15 @@
 <script lang="ts">
 	import { renderChart, type Chart } from 'svelte-chart-apex';
-	import type { TierRange } from './types';
+	import { convertNumTier, getExample, getRandomInt } from './utils';
 
-	function getRandomInt(min: number, max: number) {
-		min = Math.ceil(min);
-		max = Math.floor(max);
-		return Math.floor(Math.random() * (max - min)) + min; //최댓값은 제외, 최솟값은 포함
-	}
-
-	const getExample = () => {
-		const exampleData = [];
-		let curr_date = new Date();
-		let curr_tier: TierRange = 10;
-		for (let idx = 0; idx < 20; idx++) {
-			curr_date = new Date(curr_date.getTime() + getRandomInt(2, 45) * 60000);
-			curr_tier += (-1) ** getRandomInt(0, 2);
-			if (curr_tier < 0) {
-				curr_tier = 0;
-			}
-			if (curr_tier > 29) {
-				curr_tier = 29;
-			}
-			exampleData.push({
-				x: curr_date,
-				y: curr_tier
-			});
-		}
-		return exampleData;
-	};
+	const data = getExample();
 
 	const chart: Chart = {
 		options: {
 			series: [
 				{
 					name: '푼 문제',
-					data: getExample()
+					data: data
 				}
 			],
 			chart: {
@@ -74,11 +49,7 @@
 				},
 				forceNiceScale: true,
 				labels: {
-					formatter: (value) => {
-						let color = ['B', 'S', 'G', 'P', 'D', 'R'][Math.floor(value / 5)];
-						let num = Math.floor(value % 5) + 1;
-						return color + num;
-					}
+					formatter: convertNumTier
 				}
 			},
 			annotations: {
